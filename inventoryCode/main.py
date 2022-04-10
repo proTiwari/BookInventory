@@ -25,7 +25,9 @@ from inventoryCode.isbnValidation import checkForIsbn
 
 yashListForCorrection = []
 values = excelControl()
-print(values)
 
-isIsbnValid = checkForIsbn(values.ISBN10, values.ISBN13, yashListForCorrection)
-print(isIsbnValid)
+isIsbnValid = checkForIsbn(values["ISBN10"], values["ISBN13"], yashListForCorrection)
+
+if isIsbnValid:
+    ISBN10 = values["ISBN10"]
+    ISBN13 = values["ISBN13"]
