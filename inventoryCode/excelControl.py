@@ -5,7 +5,7 @@ import numpy as np
 
 def excelControl():
     v = pd.read_excel(io='C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx')
-    print(v)
+
     Title = v['Title'].iloc[0]
     Author = v['Author'].iloc[0]
     Description = v['Description'].iloc[0]

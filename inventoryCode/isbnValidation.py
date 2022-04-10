@@ -34,8 +34,8 @@ def checkForIsbn(isbn10, isbn13, yashListForCorrection):
     if not resultISBN13:
         yashListForCorrection.append("invalid isbn10")
     if resultISBN13 and resultISBN10:
-        result.append([True, yashListForCorrection])
+        result.append([True, yashListForCorrection, isbn10, isbn13])
         return result
     else:
-        result.append([False, yashListForCorrection])
+        result.append([False, yashListForCorrection, isbn10, isbn13])
         return result
