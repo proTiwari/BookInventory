@@ -20,4 +20,8 @@ def excelControl():
            'MRP': MRP,
            'ISBN10': ISBN10,
            'ISBN13': ISBN13}
-    return dic
+    lenth = len(dic.keys())
+    if lenth == 7:
+        return dic
+    else:
+        return print(f"number of attribute {lenth} != 7")
