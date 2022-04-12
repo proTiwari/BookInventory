@@ -2,40 +2,50 @@ import isbnlib
 
 
 def checkForIsbn(isbn10, isbn13, yashListForCorrection):
-    isbn10List = []
-    isbn13List = []
+
     result = []
-
-    if isbn10 != '':
-        isbn10 = isbn10.split()
-        for j in isbn10:
-            if j.isdigit():
-                isbn10List.append(j)
+    if str(isbn10)[-1] == 'X':
+        pass
     else:
-        yashListForCorrection.append(f"in isbn10:{isbn10} is null")
+        if isfloat(isbn10):
+            isbn10 = int(float(isbn10))
+        else:
+            yashListForCorrection.append("error in isbn10")
 
-    if isbn13 != '':
-        isbn13 = isbn13.split()
-        for i in isbn13:
-            if i.isdigit():
-                isbn13List.append(i)
+    if isfloat(isbn13):
+        isbn13 = int(float(isbn13))
     else:
-        yashListForCorrection.append(f"in isbn13:{isbn13} is null")
+        yashListForCorrection.append("error in isbn13")
 
-    if isbn10List != [] and isbn13List != []:
-        isbn10 = isbn10List[0]
-        isbn13 = isbn13List[0]
+    if isbn10 == 'nan':
+        yashListForCorrection.append('isbn10 is nan')
     else:
-        yashListForCorrection.append("isbn field is empty")
+        pass
+
+    if isbn13 == 'nan':
+        yashListForCorrection.append('isbn13 is nan')
+    else:
+        pass
+
+    isbn10 = str(isbn10)
     resultISBN10 = isbnlib.is_isbn10(isbn10)
     if not resultISBN10:
         yashListForCorrection.append("invalid isbn10")
+    isbn13 = str(isbn13)
     resultISBN13 = isbnlib.is_isbn13(isbn13)
     if not resultISBN13:
-        yashListForCorrection.append("invalid isbn10")
+        yashListForCorrection.append("invalid isbn13")
     if resultISBN13 and resultISBN10:
         result.append([True, yashListForCorrection, isbn10, isbn13])
         return result
     else:
         result.append([False, yashListForCorrection, isbn10, isbn13])
         return result
+
+
+def isfloat(num):
+    try:
+        int(float(num))
+        return True
+    except ValueError:
+        return False

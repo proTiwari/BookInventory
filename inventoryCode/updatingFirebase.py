@@ -2,21 +2,43 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from numpy.random import random
 
+cred = credentials.Certificate(
+    "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
+firebase_admin.initialize_app(cred)
 
-def updateFirestore(title, author, description, subtitle, mrp, isbn10, isbn13):
-    cred = credentials.Certificate(
-        "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
-    firebase_admin.initialize_app(cred)
+
+def updateFirestore(title, author, description, subtitle, originalPrice, isbn10, isbn13, yearOfPublish,
+                    backCoverImageUrl, frontCoverImageUrl, numberOfPages, supportingImages):
     db = firestore.client()
+    originalPrice = int(float(originalPrice))
+    doc_ref = db.collection("inventory").document()
 
-    doc_ref = db.collection("inventory").document(str(random()))
-    doc_ref.set(
-        {"Title": title, "Author": author, "Subtitle": subtitle, "Description": description, "MRP": mrp,
-         "ISBN10": isbn10,
-         "ISBN13": isbn13})
-    users_ref = db.collection("inventory")
-    docs = users_ref.stream()
-    print(f" {doc_ref.id}")
+    # code for filtering copies
+    query = db.collection("inventory").where(u'isbn10', u'==', isbn10)
+    docs10 = []
+    for j in query.stream():
+        docs10.append(j.id)
 
-    for doc in docs:
-        print(f"{doc.id} => {doc.to_dict()}")
+    query = db.collection("inventory").where(u'isbn13', u'==', isbn13)
+    docs13 = []
+    for p in query.stream():
+        docs13.append(p.id)
+
+    if not docs10 and not docs13:
+        bookId = doc_ref.id
+        doc_ref.set(
+            {"Title": title,
+             "authors": author,
+             "subtitle": subtitle,
+             "description": description,
+             "originalPrice": originalPrice,
+             "isbn10": isbn10,
+             "isbn13": isbn13,
+             "bookId": bookId})
+        # users_ref = db.collection("inventory")
+        # dos = users_ref.stream()
+        # print(f"{doc_ref.id}")
+        # for doc in dos:
+        #     print(f"{doc.id} => {doc.to_dict()}")
+    else:
+        print(f"book of isbn10:{isbn10} or isbn13:{isbn13} already exists on database")

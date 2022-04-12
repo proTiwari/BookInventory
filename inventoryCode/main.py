@@ -1,25 +1,109 @@
+import isbnlib
+
 from inventoryCode.excelControl import excelControl
 from inventoryCode.isbnValidation import checkForIsbn
 from inventoryCode.attributeValidation import isAllAttributeValid
 from inventoryCode.updatingFirebase import updateFirestore
+from inventoryCode.attributeValidation import isfloat
+
+allErrorsList = []
 
 
-yashListForCorrection = []
-values = excelControl()
+def main():
+    x = False
+    isIsbnValid = False
+    values = excelControl(allErrorsList)
+    count = 0
+    countError = 0
+    countAttError = 0
+    for dic in values[0]:
+        count += 1
+        yashListForCorrection = []
+        isAttributeValid = []
+        title = dic["Title"]
+        authors = dic["Author"]
+        description = dic["Description"]
+        subtitle = dic["Subtitle"]
+        originalPrice = dic["MRP"]
+        isbn10 = dic["ISBN10"]
+        isbn13 = dic["ISBN13"]
+        frontCoverImageUrl = dic["frontCoverImageUrl"]
+        backCoverImageUrl = dic["backCoverImageUrl"]
+        numberOfPages = dic["numberOfPages"]
+        supportingImages = dic["supportingImages"]
+        yearOfPublish = dic["yearOfPublish"]
 
-isIsbnValid = checkForIsbn(values["ISBN10"], values["ISBN13"], yashListForCorrection)
+        if isbn10[-1] == 'X':
+            x = isbnlib.is_isbn10(isbn10)
+            if not x:
+                yashListForCorrection.append('invalid isbn10(this isbn10 ends with X)')
 
-isAllAttributeValid = isAllAttributeValid(values["Title"], values["Author"], values["Description"], values["Subtitle"],
-                                          values["MRP"], values["ISBN10"], values["ISBN13"], isIsbnValid[0][2], isIsbnValid[0][3])
+        if isfloat(isbn10) or x:
+            if isfloat(isbn13):
+                if x:
+                    isIsbnValid = checkForIsbn(isbn10, int(float(isbn13)), yashListForCorrection)
+                else:
+                    isIsbnValid = checkForIsbn(int(float(isbn10)), int(float(isbn13)), yashListForCorrection)
 
-if isIsbnValid[0][0] and not yashListForCorrection:
-    ISBN10 = values["ISBN10"]
-    ISBN13 = values["ISBN13"]
+            else:
+                yashListForCorrection.append('isbn13 is not in required format')
+        else:
+            yashListForCorrection.append('isbn10 is not in required format')
 
-    if not isAllAttributeValid:
-        updateFirestore(values["Title"], values["Author"], values["Description"], values["Subtitle"], values["MRP"], isIsbnValid[0][2], isIsbnValid[0][3])
-    else:
-        error = yashListForCorrection.append(isAllAttributeValid)
-        print(error)
+        isallAttributeValid = isAllAttributeValid
 
-# total number of attributes should be included for validation
+        if yashListForCorrection:
+            countError = count
+
+        if isIsbnValid[0][0] and not yashListForCorrection:
+            if x:
+                isAttributeValid = isallAttributeValid(title, authors, description, subtitle, originalPrice,
+                                                       isbn10,
+                                                       int(float(isbn13)),
+                                                       isIsbnValid[0][2], int(float(isIsbnValid[0][3])),
+                                                       frontCoverImageUrl,
+                                                       backCoverImageUrl, numberOfPages, supportingImages,
+                                                       yearOfPublish)
+            else:
+                isAttributeValid = isallAttributeValid(title, authors, description, subtitle, originalPrice,
+                                                       int(float(isbn10)),
+                                                       int(float(isbn13)),
+                                                       int(float(isIsbnValid[0][2])), int(float(isIsbnValid[0][3])),
+                                                       frontCoverImageUrl,
+                                                       backCoverImageUrl, numberOfPages, supportingImages,
+                                                       yearOfPublish)
+
+            if isAttributeValid:
+                countAttError = count
+
+        else:
+            pass
+
+        if not isAttributeValid and not yashListForCorrection:
+            updateFirestore(title, authors, description, subtitle,
+                            originalPrice,
+                            isIsbnValid[0][2], isIsbnValid[0][3], yearOfPublish, backCoverImageUrl,
+                            frontCoverImageUrl, numberOfPages, supportingImages)
+        else:
+
+            if isAttributeValid:
+                allErrorsList.append(isAttributeValid)
+                allErrorsList.append(f"row:{countAttError+1}")
+                # print(f'error countAttError = {countAttError}')
+                # print(isAttributeValid)
+
+            if yashListForCorrection:
+                allErrorsList.append(yashListForCorrection)
+                allErrorsList.append(f"row:{countError+1}")
+                # print(f'error countError = {countError}')
+                # print(yashListForCorrection)
+    print(allErrorsList)
+
+
+main()
+# including images
+# getting most formatted data form excel file//done
+# searching isbn on firestore if it exist already or not//done
+# coma separated multiple supportingImages and author0.
+# counting the numbers of filled rows than match it with count in loop. when differ send data not reachable error//done
+# yearofpublish
