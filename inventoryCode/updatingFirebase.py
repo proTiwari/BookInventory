@@ -34,7 +34,8 @@ def updateFirestore(title, author, description, subtitle, originalPrice, isbn10,
              "originalPrice": originalPrice,
              "isbn10": isbn10,
              "isbn13": isbn13,
-             "bookId": bookId})
+             "bookId": bookId,
+             "dateOfPublish": yearOfPublish})
         # users_ref = db.collection("inventory")
         # dos = users_ref.stream()
         # print(f"{doc_ref.id}")
