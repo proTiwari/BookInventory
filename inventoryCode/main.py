@@ -15,7 +15,6 @@ allErrorsList = []
 
 
 def main():
-
     x = False
     isIsbnValid = False
     values = excelControl(allErrorsList)
@@ -117,7 +116,10 @@ def main():
                 allErrorsList.append(f"row:{countError + 1}")
                 # print(f'error countError = {countError}')
                 # print(yashListForCorrection)
-    print(allErrorsList)
+    if allErrorsList:
+        print(allErrorsList)
+    else:
+        print("No Error")
 
 
 main()
