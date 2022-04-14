@@ -23,6 +23,7 @@ def excelControl(allErrorList):
         MRP = str(v['MRP'].iloc[i])
         ISBN13 = str(v['ISBN13'].iloc[i])
         ISBN10 = str(v['ISBN10'].iloc[i])
+
         yearOfPublish = str(v['yearOfPublish'].iloc[i])
         backCoverImageUrl = str(v['backCoverImageName'].iloc[i])
         frontCoverImageUrl = str(v['frontCoverImageName'].iloc[i])
@@ -52,9 +53,12 @@ def excelControl(allErrorList):
         resultList.append(dic)
         lenth = len(dic.keys())
 
-    if lenth == 12:
+    pd_xl_file = pd.ExcelFile("C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx")
+    p = pd_xl_file.parse("Sheet1")
+    dimensions = p.shape
+    if lenth == 12 and dimensions[1] == 12:
         forwardedList.append(resultList)
         forwardedList.append(row_count)
         return forwardedList
     else:
-        return allErrorList.append(f"number of attribute {lenth} != 12")
+        return allErrorList.append(f"their should be 12 numbers of columns and you have provided {dimensions[1]}")
