@@ -5,6 +5,32 @@ def isAllAttributeValid(title, author, description, subtitle, mrp, isbn10, isbn1
 
     if isbn10 == cleanIsbn10:
         if isbn13 == cleanIsbn13:
+
+            if yearOfPublish != "nan":
+                pass
+            else:
+                isAllAttributeValidErrorList.append("error in yearOfPublish")
+
+            if frontCoverImageUrl:
+                pass
+            else:
+                isAllAttributeValidErrorList.append("empty list frontCoverImageUrl")
+
+            if backCoverImageUrl:
+                pass
+            else:
+                isAllAttributeValidErrorList.append("empty list backCoverImageUrl")
+
+            if supportingImages:
+                pass
+            else:
+                isAllAttributeValidErrorList.append("empty list supportingImages")
+
+            if isfloat(numberOfPages):
+                pass
+            else:
+                isAllAttributeValidErrorList.append("error in number of pages")
+
             if isfloat(mrp):
                 pass
             else:

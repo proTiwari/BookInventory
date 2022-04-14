@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import date
 
 
 def DateOfPublish(publishingYear, D):
@@ -37,15 +36,15 @@ def DateOfPublish(publishingYear, D):
             resultList.append(f'{dd} {res} {yy}')
             resultList.append('True')
         if Dy < yy:
-            resultList.append("error in year")
+            resultList.append("error future date")
         if Dy == yy:
             if Dm < mm:
-                resultList.append("error in month")
+                resultList.append("error future month")
             if Dm == mm:
                 if Dd == dd:
                     pass
                 if Dd < dd:
-                    resultList.append("error in date")
+                    resultList.append("error future date")
         return resultList
     else:
         resultList.append("empty date field")

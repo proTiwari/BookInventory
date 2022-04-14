@@ -1,10 +1,10 @@
 import pandas as pd
 from openpyxl import load_workbook
-import numpy as np
+
+from inventoryCode.ImageUploader import ImageUploader
 
 
 def excelControl(allErrorList):
-
     lenth = 0
     wb = load_workbook('C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx')
     sheet = wb.worksheets[0]
@@ -28,6 +28,14 @@ def excelControl(allErrorList):
         frontCoverImageUrl = str(v['frontCoverImageName'].iloc[i])
         supportingImages = str(v['supportingImages'].iloc[i])
         numberOfPages = str(v['NumberOfPages'].iloc[i])
+        ImageUploaderList = ImageUploader(frontCoverImageUrl, backCoverImageUrl, supportingImages)
+        if len(ImageUploaderList) == 1:
+            return print("ImageUploaderList error(possible reason: image does not exist in the folder)")
+        else:
+            supportingImages = ImageUploaderList[0]
+            frontCoverImageUrl = ImageUploaderList[1]
+            backCoverImageUrl = ImageUploaderList[2]
+
         dic = {'Title': Title,
                'Author': Author,
                'Description': Description,

@@ -4,13 +4,14 @@ from numpy.random import random
 
 cred = credentials.Certificate(
     "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
-firebase_admin.initialize_app(cred)
+# firebase_admin.initialize_app(cred)
 
 
 def updateFirestore(title, author, description, subtitle, originalPrice, isbn10, isbn13, yearOfPublish,
                     backCoverImageUrl, frontCoverImageUrl, numberOfPages, supportingImages):
     db = firestore.client()
     originalPrice = int(float(originalPrice))
+    numberOfPages = int(float(numberOfPages))
     doc_ref = db.collection("inventory").document()
 
     # code for filtering copies
@@ -35,6 +36,10 @@ def updateFirestore(title, author, description, subtitle, originalPrice, isbn10,
              "isbn10": isbn10,
              "isbn13": isbn13,
              "bookId": bookId,
+             "numberOfPages": numberOfPages,
+             "backCoverImageUrl": backCoverImageUrl[0],
+             "frontCoverImageUrl": frontCoverImageUrl[0],
+             "supportingImagesUrl": supportingImages,
              "dateOfPublish": yearOfPublish})
         # users_ref = db.collection("inventory")
         # dos = users_ref.stream()
