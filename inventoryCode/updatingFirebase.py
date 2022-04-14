@@ -4,7 +4,6 @@ from numpy.random import random
 
 cred = credentials.Certificate(
     "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
-# firebase_admin.initialize_app(cred)
 
 
 def updateFirestore(title, author, description, subtitle, originalPrice, isbn10, isbn13, yearOfPublish,

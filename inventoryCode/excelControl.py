@@ -35,6 +35,7 @@ def excelControl(allErrorList):
             supportingImages = ImageUploaderList[0]
             frontCoverImageUrl = ImageUploaderList[1]
             backCoverImageUrl = ImageUploaderList[2]
+        Author = Author.split(',')
 
         dic = {'Title': Title,
                'Author': Author,

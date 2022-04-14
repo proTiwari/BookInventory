@@ -43,7 +43,7 @@ def isAllAttributeValid(title, author, description, subtitle, mrp, isbn10, isbn1
                 pass
             else:
                 isAllAttributeValidErrorList.append("error in description")
-            if author != "nan":
+            if author:
                 pass
             else:
                 isAllAttributeValidErrorList.append("error in author")

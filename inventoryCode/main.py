@@ -117,10 +117,10 @@ def main():
 
 
 main()
-# including images
+# including images//done
 # getting most formatted data form excel file//done
 # searching isbn on firestore if it exist already or not//done
-# coma separated multiple supportingImages and author0.
+# coma separated multiple supportingImages and author0.//done
 # counting the numbers of filled rows than match it with count in loop. when differ send data not reachable error//done
 # yearofpublish//done
-#
+# deleting extra images from storage
