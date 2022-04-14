@@ -43,19 +43,19 @@ def ImageUploader(frontCoverImageUrl, backCoverImageUrl, supportingImages):
         if not supportingImages[i]:
             return errorList.append(f'No match for {supportingImages[i]} found')
         fileName3 = supportingImageList[0]
-        blob3 = bucket.blob(f'inventoryImages/{id}/{fileName3}')
+        blob3 = bucket.blob(f'inventoryImages/{id}/supportingImage/{fileName3}')
         blob3.upload_from_filename(fileName3)
         down = blob3.public_url
         supportingUrlList.append(down)
 
     fileName1 = frontCoverImageList[0]
     fileName2 = backCoverImageList[0]
-    blob1 = bucket.blob(f'inventoryImages/{id}/{fileName1}')
+    blob1 = bucket.blob(f'inventoryImages/{id}/frontCoverImage/{fileName1}')
     blob1.upload_from_filename(fileName1)
     down1 = blob1.public_url
     frontUrlList.append(down1)
 
-    blob2 = bucket.blob(f'inventoryImages/{id}/{fileName2}')
+    blob2 = bucket.blob(f'inventoryImages/{id}/backCoverImage/{fileName2}')
     blob2.upload_from_filename(fileName2)
     down2 = blob2.public_url
     backUrlList.append(down2)
