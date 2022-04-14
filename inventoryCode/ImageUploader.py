@@ -5,7 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, initialize_app, storage
 
 cred = credentials.Certificate(
-    "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-9169d85a2597.json")
+    "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
 firebaseApp = firebase_admin.initialize_app(cred, {'storageBucket': 'pucoread.appspot.com'})
 
 

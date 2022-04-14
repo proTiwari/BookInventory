@@ -119,7 +119,7 @@ def main():
     if allErrorsList:
         print(allErrorsList)
     else:
-        print("No Error")
+        print("successfully uploaded")
 
 
 main()
