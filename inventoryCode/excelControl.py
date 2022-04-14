@@ -5,12 +5,11 @@ from inventoryCode.ImageUploader import ImageUploader
 
 
 def excelControl(allErrorList):
-    lenth = 0
+
     wb = load_workbook('C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx')
     sheet = wb.worksheets[0]
     v = pd.read_excel(io='C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx')
     row_count = sheet.max_row
-    limit = 1000
     j = 0
     resultList = []
     forwardedList = []
@@ -51,14 +50,15 @@ def excelControl(allErrorList):
                'ISBN10': ISBN10,
                'ISBN13': ISBN13}
         resultList.append(dic)
-        lenth = len(dic.keys())
+        # lenth = len(dic.keys())
 
     pd_xl_file = pd.ExcelFile("C:/Users/stabc/OneDrive/Desktop/python/excel/testing_first_book_into_inventory.xlsx")
     p = pd_xl_file.parse("Sheet1")
     dimensions = p.shape
-    if lenth == 12 and dimensions[1] == 12:
+    if dimensions[1] == 12:
         forwardedList.append(resultList)
         forwardedList.append(row_count)
         return forwardedList
     else:
-        return allErrorList.append(f"their should be 12 numbers of columns and you have provided {dimensions[1]}")
+        allErrorList.append(f"their should be 12 numbers of columns and you have provided {dimensions[1]}")
+        return allErrorList

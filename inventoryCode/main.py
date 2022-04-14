@@ -22,6 +22,10 @@ def main():
     count = 0
     countError = 0
     countAttError = 0
+
+    if len(values) == 1:
+        print(values)
+
     for dic in values[0]:
         count += 1
         yashListForCorrection = []
