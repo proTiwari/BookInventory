@@ -1,9 +1,5 @@
-import firebase_admin
 import isbnlib
 from datetime import date
-
-from firebase_admin import credentials
-
 from inventoryCode.excelControl import excelControl
 from inventoryCode.isbnValidation import checkForIsbn
 from inventoryCode.attributeValidation import isAllAttributeValid
@@ -37,15 +33,16 @@ def main():
         isbn10 = dic["ISBN10"]
         isbn13 = dic["ISBN13"]
         frontCoverImageUrl = dic["frontCoverImageUrl"]
-        backCoverImageUrl = dic["backCoverImageUrl"]
+        # backCoverImageUrl = dic["backCoverImageUrl"]
         numberOfPages = dic["numberOfPages"]
-        supportingImages = dic["supportingImages"]
+        # supportingImages = dic["supportingImages"]
         publishingDate = dic["yearOfPublish"]
         Date = date.today()
         d1 = Date.strftime("%d/%m/%Y")
         publishingList = DateOfPublish(publishingDate, d1)
-        if publishingList[-1] == 'True':
-            publishingDate = publishingList[-2]
+
+        if publishingList[-1] == True and publishingList[-2] == True:
+            del publishingList[:]
         else:
             yashListForCorrection.append(publishingList)
 
@@ -80,16 +77,15 @@ def main():
                                                        isbn10,
                                                        int(float(isbn13)),
                                                        isIsbnValid[0][2], int(float(isIsbnValid[0][3])),
-                                                       frontCoverImageUrl,
-                                                       backCoverImageUrl, numberOfPages, supportingImages,
+                                                       frontCoverImageUrl, numberOfPages,
                                                        publishingDate)
             else:
                 isAttributeValid = isallAttributeValid(title, authors, description, subtitle, originalPrice,
                                                        int(float(isbn10)),
                                                        int(float(isbn13)),
                                                        int(float(isIsbnValid[0][2])), int(float(isIsbnValid[0][3])),
-                                                       frontCoverImageUrl,
-                                                       backCoverImageUrl, numberOfPages, supportingImages,
+                                                       frontCoverImageUrl
+                                                       , numberOfPages,
                                                        publishingDate)
 
             if isAttributeValid:
@@ -101,8 +97,8 @@ def main():
         if not isAttributeValid and not yashListForCorrection:
             updateFirestore(title, authors, description, subtitle,
                             originalPrice,
-                            isIsbnValid[0][2], isIsbnValid[0][3], publishingDate, backCoverImageUrl,
-                            frontCoverImageUrl, numberOfPages, supportingImages)
+                            isIsbnValid[0][2], isIsbnValid[0][3], publishingDate,
+                            frontCoverImageUrl, numberOfPages)
         else:
 
             if isAttributeValid:

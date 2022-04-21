@@ -6,12 +6,10 @@ cred = credentials.Certificate(
     "C:/Users/stabc/OneDrive/Desktop/python/firebase-adminsdk/pucoread-firebase-adminsdk-313ve-78cc304b7a.json")
 
 
-def updateFirestore(title, author, description, subtitle, originalPrice, isbn10, isbn13, yearOfPublish,
-                    backCoverImageUrl, frontCoverImageUrl, numberOfPages, supportingImages):
+def updateFirestore(title, author, description, subtitle, originalPrice, isbn10, isbn13, yearOfPublish, frontCoverImageUrl, numberOfPages):
     db = firestore.client()
     originalPrice = int(float(originalPrice))
     numberOfPages = int(float(numberOfPages))
-    doc_ref = db.collection("books_database").document()
 
     # code for filtering copies
     query = db.collection("books_database").where(u'isbn10', u'==', isbn10)
@@ -25,6 +23,7 @@ def updateFirestore(title, author, description, subtitle, originalPrice, isbn10,
         docs13.append(p.id)
 
     if not docs10 and not docs13:
+        doc_ref = db.collection("books_database").document()
         bookId = doc_ref.id
         doc_ref.set(
             {"title": title,
@@ -40,10 +39,5 @@ def updateFirestore(title, author, description, subtitle, originalPrice, isbn10,
              "frontCoverImageUrl": frontCoverImageUrl[0],
              # "supportingImagesUrl": supportingImages,
              "yearOfPublish": yearOfPublish})
-        # users_ref = db.collection("inventory")
-        # dos = users_ref.stream()
-        # print(f"{doc_ref.id}")
-        # for doc in dos:
-        #     print(f"{doc.id} => {doc.to_dict()}")
     else:
         print(f"book of isbn10:{isbn10} or isbn13:{isbn13} already exists on database")
